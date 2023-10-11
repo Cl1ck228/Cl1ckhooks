@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отправка сообщения Вебхуком By Cl1ck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #36393f;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #2e3136;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #40444b;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-button {
+            background-color: #7289da;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .file-upload-button:hover {
+            background-color: #677bc4;
+        }
+
+        button {
+            background-color: #7289da;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #677bc4;
+        }
+
+        p {
+            margin-top: 10px;
+        }
+
+        /* Добавляем свойство word-wrap для переноса текста в сообщении */
+        textarea {
+            word-wrap: break-word;
+        }
+
+        /* Стили для навигационного бара (панели) */
+        .navbar {
+            background-color: #36393f;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 16px;
+        }
+
+        .tdh-button {
+            background: none;
+            border: none;
+            color: #7289da;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Отправка сообщения и файла на вебхук Discord</h1>
+        <label for="webhook">Ссылка на вебхук:</label>
+        <input type="text" id="webhook"><br>
+        <label for="message">Сообщение:</label>
+        <textarea id="message" rows="5"></textarea><br>
+        <label for="file">Выберите файл:</label>
+        <label for="file" class="file-upload-button">Загрузить файл</label>
+        <input type="file" id="file"><br>
+        <button id="send-button">Отправить</button>
+        <p id="status"></p>
+    </div>
+
+    <!-- Навигационный бар (панель) ниже -->
+    <div class="navbar">
+        <button class="tdh-button" onclick="redirectToTdhCompany()">TDH Company</button>
+    </div>
+
+    <audio id="notification-sound" src="https://www.myinstants.com/instant/discord-notification-38119.mp3"></audio>
+
+    <script>
+        document.getElementById("file").addEventListener("change", function() {
+            const fileInput = document.getElementById("file");
+            const selectedFile = fileInput.files[0];
+            const fileUploadButton = document.querySelector(".file-upload-button");
+
+            if (selectedFile) {
+                fileUploadButton.textContent = `Выбран файл: ${selectedFile.name}`;
+            } else {
+                fileUploadButton.textContent = "Загрузить файл";
+            }
+        });
+
+        function sendMessage() {
+            const webhookUrl = document.getElementById("webhook").value;
+            const message = document.getElementById("message").value;
+            const selectedFile = document.getElementById("file").files[0];
+
+            if (webhookUrl && (message || selectedFile)) {
+                const formData = new FormData();
+                formData.append("content", message);
+                if (selectedFile) {
+                    formData.append("file", selectedFile);
+                }
+
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.status === 204) {
+                        document.getElementById("status").textContent = "Сообщение и файл успешно отправлены";
+                    } else {
+                        document.getElementById("status").textContent = "Произошла ошибка при отправке сообщения и файла";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("status").textContent = "Произошла ошибка при отправке сообщения и файла";
+                });
+            }
+        }
+
+        function redirectToTdhCompany() {
+            window.open("https://cutt.ly/5wnf69mr", "_blank");
+        }
+
+        document.getElementById("send-button").addEventListener("click", function() {
+            const audio = document.getElementById("notification-sound");
+            audio.play();
+        });
+    </script>
+</body>
+</html>
